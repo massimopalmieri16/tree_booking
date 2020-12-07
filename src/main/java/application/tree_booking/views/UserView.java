@@ -1,9 +1,8 @@
-package application.tree_booking.view;
+package application.tree_booking.views;
 
 import application.tree_booking.entities.Gender;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class UserView {
 	private String username;

@@ -1,11 +1,8 @@
 package application.tree_booking.entities;
 
-import org.apache.catalina.User;
-
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 

@@ -1,10 +1,9 @@
 package application.tree_booking.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class UserDB {
@@ -16,6 +15,11 @@ public class UserDB {
 	private LocalDate userdbDatebirth;
 	private Gender userdbGender;
 	private String userdbPassword;
+	@OneToMany(mappedBy = "cookiedbUserDB",
+			orphanRemoval = true,
+			fetch = FetchType.LAZY,
+			cascade = CascadeType.ALL)
+	private List<CookieDB> userdbCookie;
 
 	public UserDB() {
 	}
@@ -28,7 +32,6 @@ public class UserDB {
 		this.userdbGender = userdbGender;
 		this.userdbPassword = userdbPassword;
 	}
-
 
 	// All getter and setter
 	public int getUserdbPk() {

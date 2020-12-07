@@ -1,4 +1,4 @@
-package application.tree_booking.view;
+package application.tree_booking.views;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -18,6 +18,18 @@ public class EventView {
 		this.date = date;
 		this.place = place;
 		this.capacity = capacity;
+	}
+
+	@Override
+	public String toString() {
+		return "EventView{" +
+				"eventid=" + eventid +
+				", owned=" + owned +
+				", name='" + name + '\'' +
+				", date=" + date +
+				", place='" + place + '\'' +
+				", capacity=" + capacity +
+				'}';
 	}
 
 	// All getter and setter

@@ -1,14 +1,13 @@
-package application.tree_booking.controller;
+package application.tree_booking.controllers;
 
-import application.tree_booking.service.AuthenticationService;
-import application.tree_booking.view.UserView;
+import application.tree_booking.services.AuthenticationService;
+import application.tree_booking.services.UserDataAuth;
+import application.tree_booking.views.UserView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.text.ParseException;
-import java.util.UUID;
 
 @RestController
 public class AuthenticationController {
@@ -21,17 +20,17 @@ public class AuthenticationController {
 		System.out.println("UserView ricevuta dal client");
 		System.out.println(userView.toString());
 
-		UserView userViewOut = authenticationService.signUpUser(userView);
-		if(userViewOut != null) {
-			Cookie cookie = new Cookie("userID", UUID.randomUUID().toString());
-			response.addCookie(cookie);
+		UserDataAuth userDataAuth = authenticationService.signUpUser(userView);
+		if(userDataAuth != null) {
+
+			response.addCookie(userDataAuth.getCookie());
 			response.setStatus(201);	// Created
 
-			System.out.println("Registrazione effettuata correttamente cookie: " + cookie.getValue());
+			System.out.println("Registrazione effettuata correttamente | cookie: " + userDataAuth.getCookie().getValue());
 		}else{
 			response.setStatus(409);	// Conflict
 		}
-		return userViewOut;
+		return userView;
 	}
 
 	@GetMapping("/login")
@@ -41,18 +40,19 @@ public class AuthenticationController {
 
 		System.out.println("Richiesta login " + username + " " + password);
 
-		UserView userViewOut = authenticationService.login(username, password);
-		if(userViewOut != null) {
-			Cookie cookie = new Cookie("userID", UUID.randomUUID().toString());
-			response.addCookie(cookie);
+		UserDataAuth userDataAuth = authenticationService.login(username, password);
+		if(userDataAuth != null) {
+			response.addCookie(userDataAuth.getCookie());
 			response.setStatus(200);	// OK
 
-			System.out.println("Login effettuato correttamente cookie: " + cookie.getValue());
+			System.out.println("Login effettuato correttamente | cookie: " + userDataAuth.getCookie().getValue());
+			return userDataAuth.getUserView();
 		}else{
 			response.setStatus(401);	// Unauthorized
 
 			System.out.println("Login fallito");
+			return null;
 		}
-		return userViewOut;
+
 	}
 }
