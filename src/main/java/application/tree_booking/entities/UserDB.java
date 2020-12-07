@@ -3,7 +3,6 @@ package application.tree_booking.entities;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 public class UserDB {
@@ -20,6 +19,8 @@ public class UserDB {
 			fetch = FetchType.LAZY,
 			cascade = CascadeType.ALL)
 	private List<CookieDB> userdbCookie;
+	@ManyToMany(mappedBy = "eventdbParticipants")
+	private List<EventDB> userdbEventsJoined;
 
 	public UserDB() {
 	}

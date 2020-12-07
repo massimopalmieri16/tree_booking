@@ -1,14 +1,13 @@
 package application.tree_booking.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
 public class EventDB {
-	@Id
+	@Id @GeneratedValue
 	private int eventdbPk;
 	private UUID eventdbUuid;
 	private String eventdbName;
@@ -17,6 +16,9 @@ public class EventDB {
 	private int eventdbCapacity;
 	@OneToOne
 	private UserDB eventdbCreator;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable
+	private Set<UserDB> eventdbParticipants;
 
 	public EventDB() {
 	}
@@ -30,7 +32,26 @@ public class EventDB {
 		this.eventdbCreator = eventdbCreator;
 	}
 
+	public boolean addPartecipants(UserDB userDB){
+		if(this.eventdbParticipants.size() < this.eventdbCapacity && this.eventdbDate.isAfter(LocalDateTime.now())) {
+			return this.eventdbParticipants.add(userDB);
+		}
+		return false;
+	}
+
+	public void removePartecipants(UserDB userDB){
+		this.eventdbParticipants.remove(userDB);
+	}
+
 	// All getter and setter
+	public Set<UserDB> getEventdbParticipants() {
+		return eventdbParticipants;
+	}
+
+	public void setEventdbParticipants(Set<UserDB> eventdbParticipants) {
+		this.eventdbParticipants = eventdbParticipants;
+	}
+
 	public UserDB getEventdbCreator() {
 		return eventdbCreator;
 	}

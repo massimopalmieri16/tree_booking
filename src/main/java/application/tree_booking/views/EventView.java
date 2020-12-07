@@ -6,14 +6,16 @@ import java.util.UUID;
 public class EventView {
 	private UUID eventid;
 	private boolean owned;
+	private boolean joined;
 	private String name;
 	private LocalDateTime date;
 	private String place;
 	private Integer capacity;
 
-	public EventView(UUID eventid, boolean owned, String name, LocalDateTime date, String place, Integer capacity) {
+	public EventView(UUID eventid, boolean owned, boolean joined, String name, LocalDateTime date, String place, Integer capacity) {
 		this.eventid = eventid;
 		this.owned = owned;
+		this.joined = joined;
 		this.name = name;
 		this.date = date;
 		this.place = place;
@@ -25,6 +27,7 @@ public class EventView {
 		return "EventView{" +
 				"eventid=" + eventid +
 				", owned=" + owned +
+				", joined=" + joined +
 				", name='" + name + '\'' +
 				", date=" + date +
 				", place='" + place + '\'' +
@@ -33,6 +36,14 @@ public class EventView {
 	}
 
 	// All getter and setter
+	public boolean isJoined() {
+		return joined;
+	}
+
+	public void setJoined(boolean joined) {
+		this.joined = joined;
+	}
+
 	public UUID getEventid() {
 		return eventid;
 	}

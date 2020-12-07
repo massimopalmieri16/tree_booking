@@ -3,6 +3,7 @@ package application.tree_booking.controllers;
 import application.tree_booking.entities.UserDB;
 import application.tree_booking.services.AuthenticationService;
 import application.tree_booking.services.EventService;
+import application.tree_booking.views.EventInputView;
 import application.tree_booking.views.EventView;
 import application.tree_booking.views.UserView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class EventController {
 			return eventService.getActiveEvents(userDB);
 		}else{
 			System.out.println("Cookie non valido");
-			response.setStatus(400);
+			response.setStatus(400);	// Bad Request
 			return null;
 		}
 	}
@@ -47,12 +48,19 @@ public class EventController {
 		UserDB userDB = authenticationService.validCookie(cookieString);
 		if(userDB != null) {
 			System.out.println("Cookie valido dell'user " + userDB.getUserdbUsername());
-			response.setStatus(200);    // OK
-			// TODO aggiungere chiamata a funzione eventService che dato in input eventId restituisce EventView
-			return null;
+
+			EventView eventView = eventService.getEventDetails(eventId, userDB);
+			if(eventView != null) {
+				response.setStatus(200);    // OK
+				return eventView;
+			}else {
+				response.setStatus(400);    // Bad Request
+				return null;
+			}
+
 		}else{
 			System.out.println("Cookie non valido");
-			response.setStatus(400);
+			response.setStatus(400);	// Bad Request
 			return null;
 		}
 	}
@@ -68,16 +76,16 @@ public class EventController {
 			System.out.println("Cookie valido dell'user " + userDB.getUserdbUsername());
 			response.setStatus(200);    // OK
 			// TODO aggiungere chiamata a funzione eventService che dato in input userDB restituisce i suoi EventView
-			return null;
+			return eventService.getUserEvents(userDB);
 		}else{
 			System.out.println("Cookie non valido");
-			response.setStatus(400);
+			response.setStatus(400);	// Bad Request
 			return null;
 		}
 	}
 
 	@PostMapping("/event")
-	public EventView createEvent(/* TODO creare classe EventInputView @RequestBody EventInputView eventInputView,*/
+	public EventView createEvent(@RequestBody EventInputView eventInputView,
 								 @CookieValue(value = "userID") String cookieString,
 								 HttpServletResponse response) {
 
@@ -86,12 +94,18 @@ public class EventController {
 		UserDB userDB = authenticationService.validCookie(cookieString);
 		if(userDB != null) {
 			System.out.println("Cookie valido dell'user " + userDB.getUserdbUsername());
-			response.setStatus(200);    // OK
-			// TODO aggiungere chiamata a funzione eventService che dato in input eventInputView lo crea e restituisce EventView
-			return null;
+
+			EventView eventView = eventService.createEvent(eventInputView, userDB);
+			if(eventView != null){	// se eventView != null è stato salvato correttamente
+				response.setStatus(201);    // Created
+				return eventView;
+			}else {
+				response.setStatus(400);	// Bad Request
+				return null;
+			}
 		}else{
 			System.out.println("Cookie non valido");
-			response.setStatus(400);
+			response.setStatus(400);	// Bad Request
 			return null;
 		}
 	}
@@ -106,9 +120,15 @@ public class EventController {
 		UserDB userDB = authenticationService.validCookie(cookieString);
 		if(userDB != null) {
 			System.out.println("Cookie valido dell'user " + userDB.getUserdbUsername());
-			response.setStatus(200);    // OK
-			// TODO aggiungere chiamata a funzione eventService che dato in input eventId lo joina e restituisce EventView
-			return null;
+
+			EventView eventView = eventService.joinEvent(eventId, userDB);
+			if(eventView != null) {
+				response.setStatus(201);    // OK
+				return eventView;
+			}else {
+				response.setStatus(400);    // Bad Request
+				return null;
+			}
 		}else{
 			System.out.println("Cookie non valido");
 			response.setStatus(400);
@@ -126,9 +146,15 @@ public class EventController {
 		UserDB userDB = authenticationService.validCookie(cookieString);
 		if(userDB != null) {
 			System.out.println("Cookie valido dell'user " + userDB.getUserdbUsername());
-			response.setStatus(200);    // OK
-			// TODO aggiungere chiamata a funzione eventService che dato in input eventId lo unjoina e restituisce EventView
-			return null;
+
+			EventView eventView = eventService.unjoinEvent(eventId, userDB);
+			if(eventView != null) {
+				response.setStatus(201);    // OK
+				return eventView;
+			}else {
+				response.setStatus(400);    // Bad Request
+				return null;
+			}
 		}else{
 			System.out.println("Cookie non valido");
 			response.setStatus(400);
@@ -146,9 +172,15 @@ public class EventController {
 		UserDB userDB = authenticationService.validCookie(cookieString);
 		if(userDB != null) {
 			System.out.println("Cookie valido dell'user " + userDB.getUserdbUsername());
-			response.setStatus(200);    // OK
-			// TODO aggiungere chiamata a funzione eventService che dato in input eventId lo cancella e restituisce EventView
-			return null;
+
+			EventView eventView = eventService.cancelEvent(eventId, userDB);
+			if(eventView != null) {
+				response.setStatus(200);    // OK
+				return eventView;
+			}else {
+				response.setStatus(400);    // Bad Request
+				return null;
+			}
 		}else{
 			System.out.println("Cookie non valido");
 			response.setStatus(400);
