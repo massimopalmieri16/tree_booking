@@ -2,6 +2,7 @@ package application.tree_booking.entities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,9 +15,11 @@ public class EventDB {
 	private LocalDateTime eventdbDate;
 	private String eventdbPlace;
 	private int eventdbCapacity;
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER,
+			cascade = CascadeType.DETACH)
 	private UserDB eventdbCreator;
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER,
+			cascade = CascadeType.DETACH)
 	@JoinTable
 	private Set<UserDB> eventdbParticipants;
 
@@ -30,6 +33,7 @@ public class EventDB {
 		this.eventdbPlace = eventdbPlace;
 		this.eventdbCapacity = eventdbCapacity;
 		this.eventdbCreator = eventdbCreator;
+		this.eventdbParticipants = new HashSet<>();
 	}
 
 	public boolean addPartecipants(UserDB userDB){
