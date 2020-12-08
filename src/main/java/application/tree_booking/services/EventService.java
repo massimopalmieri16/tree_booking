@@ -36,27 +36,13 @@ public class EventService {
 	}
 
 	public List<EventView> getUserEvents(UserDB userDBLogged){
-		List<EventDB> eventDBList = StreamSupport
-				.stream(eventDBRepository.findAll().spliterator(), false)
-				.collect(Collectors.toList());
-
-		// tolgo eventi in cui l'utente è già registrato e quelli passati
-		eventDBList =  eventDBList.stream()
-				.filter(e -> e.getEventdbDate().isAfter(LocalDateTime.now()))
-				.filter(e -> e.getEventdbParticipants().contains(userDBLogged))
-				.collect(Collectors.toList());
-
-		return parseListFromEventDBToEventView(eventDBList, userDBLogged);
+		return parseListFromEventDBToEventView(eventDBRepository.findUserEvents(userDBLogged.getUserdbPk()), userDBLogged);
 	}
 
 	public EventView getEventDetails(UUID idEvent, UserDB userDBLogged){
 		Optional<EventDB> optionalEventDB = eventDBRepository.findByEventdbUuid(idEvent);
-		if(optionalEventDB.isPresent()){
-			return parseFromEventDBToEventView(optionalEventDB.get(), userDBLogged);
-		}else {
-			// se nessun evento presente con id in input ritorno null
-			return null;
-		}
+		// se nessun evento presente con id in input ritorno null
+		return optionalEventDB.map(eventDB -> parseFromEventDBToEventView(eventDB, userDBLogged)).orElse(null);
 	}
 
 	public EventView cancelEvent(UUID idEvent, UserDB userDBLogged){
