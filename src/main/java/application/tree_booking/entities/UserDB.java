@@ -3,6 +3,7 @@ package application.tree_booking.entities;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class UserDB {
@@ -32,6 +33,24 @@ public class UserDB {
 		this.userdbDatebirth = userdbDatebirth;
 		this.userdbGender = userdbGender;
 		this.userdbPassword = userdbPassword;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (Objects.isNull(o) || !(o instanceof UserDB)) return false;
+		UserDB userDB = (UserDB) o;
+		return getUserdbUsername().equals(userDB.getUserdbUsername()) &&
+				getUserdbName().equals(userDB.getUserdbName()) &&
+				getUserdbSurname().equals(userDB.getUserdbSurname()) &&
+				getUserdbDatebirth().equals(userDB.getUserdbDatebirth()) &&
+				getUserdbGender() == userDB.getUserdbGender() &&
+				getUserdbPassword().equals(userDB.getUserdbPassword());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(getUserdbUsername(), getUserdbName(), getUserdbSurname(), getUserdbDatebirth(), getUserdbGender(), getUserdbPassword());
 	}
 
 	// All getter and setter

@@ -5,7 +5,6 @@ import application.tree_booking.services.AuthenticationService;
 import application.tree_booking.services.EventService;
 import application.tree_booking.views.EventInputView;
 import application.tree_booking.views.EventView;
-import application.tree_booking.views.UserView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,7 +74,6 @@ public class EventController {
 		if(userDB != null) {
 			System.out.println("Cookie valido dell'user " + userDB.getUserdbUsername());
 			response.setStatus(200);    // OK
-			// TODO aggiungere chiamata a funzione eventService che dato in input userDB restituisce i suoi EventView
 			return eventService.getUserEvents(userDB);
 		}else{
 			System.out.println("Cookie non valido");
